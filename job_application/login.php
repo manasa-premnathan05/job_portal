@@ -367,30 +367,39 @@ if (empty($_SESSION['csrf_token'])) {
         }
        
         .form-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            transition: var(--transition);
-        }
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    transition: var(--transition);
+    position: relative;
+    min-height: 400px;
+}
        
-        .user-form {
-            opacity: 1;
-            visibility: visible;
-            justify-content: center;
-        }
-       
-        .admin-form {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 90%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+        .user-form, 
+.admin-form {
+    width: 100%;
+    transition: var(--transition);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 0;
+}
+.user-form {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+}
+
+.admin-form.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+}
        
         .form-title {
             font-size: 24px;
@@ -605,12 +614,27 @@ if (empty($_SESSION['csrf_token'])) {
             }
            
             .admin-form {
-                position: relative;
+                display: none;
             }
+            .user-form, 
+    .admin-form {
+        position: relative;
+        min-height: auto;
+        padding: 0;
+    }
            
             .user-form.inactive {
                 display: none;
             }
+
+             
+    .admin-form.active {
+        display: flex;
+    }
+    
+    .user-form.inactive {
+        display: none;
+    }
         }
        
         @media (max-width: 576px) {
@@ -786,17 +810,21 @@ if (empty($_SESSION['csrf_token'])) {
     </div>
 
     <script>
-        // Toggle between user and admin forms
-        document.getElementById('toggleForm').addEventListener('click', function() {
-            document.getElementById('userForm').classList.add('inactive');
-            document.getElementById('adminForm').classList.add('active');
-        });
-        
-        document.getElementById('backToUserLogin').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('userForm').classList.remove('inactive');
-            document.getElementById('adminForm').classList.remove('active');
-        });
+     // Update the toggle functionality
+document.getElementById('toggleForm').addEventListener('click', function() {
+    document.getElementById('userForm').classList.add('inactive');
+    document.getElementById('adminForm').classList.add('active');
+    // Force reflow to enable transition
+    document.getElementById('adminForm').offsetHeight;
+});
+
+document.getElementById('backToUserLogin').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('adminForm').classList.remove('active');
+    document.getElementById('userForm').classList.remove('inactive');
+    // Force reflow to enable transition
+    document.getElementById('userForm').offsetHeight;
+});
         
         // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
