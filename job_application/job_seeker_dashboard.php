@@ -381,7 +381,7 @@
         <!-- Navigation -->
         <nav class="navbar">
             <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="nav-brand">JobPortal Pro</div>
+                <div class="nav-brand">JobPortal</div>
                 <div class="flex items-center space-x-4">
                     <span class="text-gray-700 font-medium">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                     <a href="logout.php" class="btn btn-danger">
