@@ -47,336 +47,667 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-        <style>
-    :root {
-        --primary: #4a6bff;
-        --primary-dark: #3a56d4;
-        --secondary: #3f37c9;
-        --light: #f8f9fa;
-        --dark: #2d3748;
-        --gray: #718096;
-        --light-gray: #e2e8f0;
-        --danger: #e53e3e;
-        --success: #38a169;
-        --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-    }
+<style>
+:root {
+    --primary: #1e3a8a; /* Navy blue for a professional look */
+    --primary-dark: #172554; /* Darker navy for depth */
+    --secondary: #6b7280; /* Neutral gray for secondary elements */
+    --accent: #3b82f6; /* Subtle blue for accents */
+    --success: #15803d; /* Muted green for success */
+    --warning: #d97706; /* Subtle amber for warnings */
+    --danger: #b91c1c; /* Muted red for errors */
+    --dark: #111827; /* Dark gray for text */
+    --light: #f9fafb; /* Light gray for backgrounds */
+    --gray: #4b5563; /* Medium gray for secondary text */
+    --light-gray: #d1d5db; /* Light gray for borders */
+    --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #4b5563 100%); /* Professional gradient */
+    --gradient-secondary: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); /* Neutral gradient */
+    --gradient-success: linear-gradient(135deg, #15803d 0%, #4ade80 100%); /* Success gradient */
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+/* Add this to your CSS */
+#fileNameDisplay {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(239, 246, 255, 0.5);
+    border-radius: 8px;
+    border: 1px dashed rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+}
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    }
+#fileNameDisplay:hover {
+    background: rgba(219, 234, 254, 0.7);
+    border-color: rgba(59, 130, 246, 0.5);
+}
 
-    body {
-        background-color: #f7fafc;
-        min-height: 100vh;
-        color: var(--dark);
-        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyMzgsMjQyLDI1NSwwLjAzKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD9iMCUiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=');
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    /* Navigation */
-    .navbar {
-        background: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-    }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1e3a8a 0%, #4b5563 100%); /* Updated gradient */
+    min-height: 100vh;
+    color: var(--dark);
+    overflow-x: hidden;
+}
 
-    .nav-brand {
-        font-weight: 700;
-        font-size: 1.5rem;
-        color: var(--primary);
-    }
+/* Animated Background */
+.bg-animated {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, #1e3a8a 0%, #4b5563 100%); /* Updated gradient */
+}
 
-    /* Main Content */
+.bg-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.03)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.03)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>'); /* Subtler grain */
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+/* Navigation */
+.navbar {
+    background: rgba(255, 255, 255, 0.98); /* Slightly more opaque for professionalism */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(209, 213, 219, 0.3); /* Light gray border */
+    box-shadow: var(--shadow-soft);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: var(--shadow-medium);
+}
+
+.nav-brand {
+    font-weight: 800;
+    font-size: 1.75rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: all 0.3s ease;
+}
+
+.nav-brand:hover {
+    transform: scale(1.05);
+}
+
+/* Main Container */
+.main-container {
+    background: rgba(255, 255, 255, 0.95); /* More opaque for clarity */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px; /* Slightly smaller radius for a cleaner look */
+    margin: 2rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(209, 213, 219, 0.3); /* Light gray border */
+    animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Typography */
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg,rgb(56, 49, 49) 0%,rgb(34, 36, 39) 100%); /* Darker gray for better contrast */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow for readability */
+    position: relative;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+    to { text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2); }
+}
+
+.main-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; /* Slightly smaller */
+    height: 3px;
+    background: var(--gradient-success);
+    border-radius: 2px;
+    animation: lineExpand 1s ease-out 0.5s both;
+}
+
+@keyframes lineExpand {
+    from { width: 0; }
+    to { width: 80px; }
+}
+
+/* Job Cards */
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.job-card {
+    background: rgba(255, 255, 255, 0.98); /* More opaque for professionalism */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px; /* Cleaner radius */
+    padding: 1.5rem; /* Slightly less padding */
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(209, 213, 219, 0.3); /* Light gray border */
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    opacity: 0;
+    animation: cardSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.job-card:nth-child(1) { animation-delay: 0.1s; }
+.job-card:nth-child(2) { animation-delay: 0.2s; }
+.job-card:nth-child(3) { animation-delay: 0.3s; }
+.job-card:nth-child(4) { animation-delay: 0.4s; }
+.job-card:nth-child(5) { animation-delay: 0.5s; }
+.job-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes cardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.job-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.job-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(75, 85, 99, 0.05) 100%); /* Updated gradient */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.job-card:hover {
+    transform: translateY(-8px) scale(1.01); /* Subtler hover effect */
+    box-shadow: var(--shadow-medium);
+    border-color: rgba(30, 58, 138, 0.3);
+}
+
+.job-card:hover::before {
+    transform: scaleX(1);
+}
+
+.job-card:hover::after {
+    opacity: 1;
+}
+
+.job-title {
+    font-size: 1.25rem; /* Slightly smaller for professionalism */
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.job-card:hover .job-title {
+    color: var(--primary);
+    transform: translateX(3px); /* Subtler transform */
+}
+
+.job-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.job-detail i {
+    width: 20px;
+    margin-right: 0.75rem;
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.job-card:hover .job-detail i {
+    transform: scale(1.05); /* Subtler scale */
+    color: var(--accent); /* Use accent color */
+}
+
+.job-card:hover .job-detail {
+    transform: translateX(2px); /* Subtler transform */
+}
+
+/* Buttons */
+.btn-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.btn {
+    padding: 0.875rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3); /* Updated shadow */
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+}
+
+.btn-success {
+    background: var(--gradient-success);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.btn-danger {
+    background: var(--gradient-secondary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* Modals */
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+.modal {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: var(--shadow-large);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform: translateY(30px) scale(0.9);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 900px;
+    width: 95%;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.modal.show {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.modal-header {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.modal-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.modal-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--gray);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 2rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.modal-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: rgba(248, 250, 252, 0.5);
+}
+
+/* Form Elements */
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    background: white;
+}
+
+.file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border: 2px dashed var(--light-gray);
+    border-radius: 12px;
+    background: rgba(248, 250, 252, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.file-upload-label:hover {
+    border-color: var(--primary);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.file-upload-label i {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Loading Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(102, 126, 234, 0.1);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Messages */
+.message {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    animation: messageSlide 0.4s ease;
+}
+
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.message i {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.message-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border-left: 4px solid var(--success);
+}
+
+.message-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-left: 4px solid var(--danger);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
     .main-container {
-        background: white;
-        border-radius: 16px;
-        margin: 2rem auto;
-        padding: 2rem;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        max-width: 1200px;
+        margin: 1rem;
+        padding: 1rem;
+        border-radius: 12px; /* Smaller radius for mobile */
     }
 
     .main-title {
-        font-size: 2rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 2rem;
-        color: var(--dark);
-        position: relative;
+        font-size: 1.75rem; /* Smaller for mobile */
     }
 
-    .main-title::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 3px;
-        background: var(--primary);
-    }
-
-    /* Job Cards */
     .jobs-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        grid-template-columns: 1fr;
         gap: 1.5rem;
-        margin-top: 2rem;
     }
 
     .job-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        border: 1px solid var(--light-gray);
-        transition: var(--transition);
+        padding: 1.25rem;
     }
 
-    .job-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        border-color: var(--primary);
-    }
-
-    .job-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--dark);
-        margin-bottom: 1rem;
-    }
-
-    .job-detail {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.75rem;
-        color: var(--gray);
-        font-size: 0.95rem;
-    }
-
-    .job-detail i {
-        width: 20px;
-        margin-right: 0.75rem;
-        color: var(--primary);
-    }
-
-    /* Buttons */
     .btn-group {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
+        flex-direction: column;
     }
 
     .btn {
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        border: none;
-        cursor: pointer;
-        transition: var(--transition);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .btn-primary {
-        background: var(--primary);
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(74, 107, 255, 0.3);
-    }
-
-    .btn-success {
-        background: var(--success);
-        color: white;
-    }
-
-    .btn-success:hover {
-        background: #2d9a5e;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(56, 161, 105, 0.3);
-    }
-
-    .btn-danger {
-        background: var(--danger);
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background: #c53030;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
-    }
-
-    /* Modals */
-    .modal-backdrop {
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(3px);
+        width: 100%;
     }
 
     .modal {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        max-width: 800px;
         width: 95%;
+        margin: 1rem;
     }
 
-    .modal-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid var(--light-gray);
-        position: relative;
-    }
-
-    .modal-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--dark);
-    }
-
-    .modal-close {
-        position: absolute;
-        top: 1.5rem;
-        right: 1.5rem;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: var(--gray);
-        cursor: pointer;
-    }
-
-    .modal-body {
-        padding: 1.5rem;
-        max-height: 60vh;
-        overflow-y: auto;
-    }
-
+    .modal-header,
+    .modal-body,
     .modal-footer {
-        padding: 1rem 1.5rem;
-        border-top: 1px solid var(--light-gray);
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-    }
-
-    /* Messages */
-    .message {
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-    }
-
-    .message i {
-        margin-right: 0.75rem;
-    }
-
-    .message-success {
-        background: rgba(56, 161, 105, 0.1);
-        color: var(--success);
-        border-left: 4px solid var(--success);
-    }
-
-    .message-error {
-        background: rgba(229, 62, 62, 0.1);
-        color: var(--danger);
-        border-left: 4px solid var(--danger);
-    }
-
-    /* Form Elements */
-    .form-control {
-        width: 100%;
-        padding: 0.875rem 1rem;
-        border: 1px solid var(--light-gray);
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: var(--transition);
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
-    }
-
-    .file-upload {
-        position: relative;
-        display: inline-block;
-        width: 100%;
-    }
-
-    .file-upload-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         padding: 1.5rem;
-        border: 2px dashed var(--light-gray);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: var(--transition);
-        text-align: center;
     }
+}
 
-    .file-upload-label:hover {
-        border-color: var(--primary);
-        background: rgba(74, 107, 255, 0.05);
-    }
+/* No jobs state */
+.no-jobs {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+}
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .main-container {
-            margin: 1rem;
-            padding: 1rem;
-        }
+.no-jobs i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.4; /* Subtler opacity */
+}
 
-        .jobs-grid {
-            grid-template-columns: 1fr;
-        }
+.no-jobs h3 {
+    font-size: 1.25rem; /* Slightly smaller */
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.95);
+}
 
-        .btn-group {
-            flex-direction: column;
-        }
+/* Pulse animation for loading states */
+.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
-        .btn {
-            width: 100%;
-        }
-    }
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+/* Add this to your CSS */
+#uploadStatus .spinner {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+    margin: 0 auto 0.5rem;
+}
 
-    /* No jobs state */
-    .no-jobs {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: var(--gray);
-        grid-column: 1 / -1;
-    }
-
-    .no-jobs i {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        color: var(--light-gray);
-    }
-
-    .no-jobs h3 {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-        color: var(--dark);
-    }
+#uploadStatus .message {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    margin: 0;
+}
 </style>
     </head>
     <body>
-       
+        <div class="bg-animated"></div>
         
         <!-- Navigation -->
         <nav class="navbar">
@@ -519,33 +850,51 @@
                                 <span>You need to upload a CV before applying. Please upload your CV below.</span>
                             </div>
                             <form id="cvUploadForm" class="space-y-4">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
-                                <div class="file-upload">
-                                    <input type="file" name="cv" accept=".pdf" required>
-                                    <div class="file-upload-label">
-                                        <div>
-                                            <i class="fas fa-cloud-upload-alt"></i>
-                                            <div class="font-semibold">Upload your CV</div>
-                                            <div class="text-sm text-gray-500">PDF format, max 2MB</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-full">
-                                    <i class="fas fa-upload mr-2"></i>Upload CV
-                                </button>
-                            </form>
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
+    <div class="file-upload">
+        <input type="file" name="cv" accept=".pdf" required>
+        <div class="file-upload-label">
+            <div>
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="font-semibold">Upload your CV</div>
+                <div class="text-sm text-gray-500">PDF format, max 2MB</div>
+            </div>
+        </div>
+    </div>
+    <!-- Add this file name display -->
+    <div id="fileNameDisplay" class="text-sm text-gray-600 text-center hidden">
+        <i class="fas fa-file-pdf mr-1"></i>
+        <span id="selectedFileName"></span>
+    </div>
+    <!-- Status container -->
+    <div id="uploadStatus" class="text-center hidden">
+        <div class="spinner inline-block !w-6 !h-6 !border-2 mb-2"></div>
+        <p class="text-sm text-gray-600">Uploading your CV...</p>
+    </div>
+    <button type="submit" class="btn btn-primary w-full">
+        <i class="fas fa-upload mr-2"></i>Upload CV
+    </button>
+</form>
                         <?php else: ?>
                             <div class="message message-success">
                                 <i class="fas fa-check-circle"></i>
                                 <span>Your CV is ready! You can apply for this position.</span>
                             </div>
-                            <form id="applyForm" class="space-y-4">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
-                                <input type="hidden" name="job_id" id="applyJobId">
-                                <button type="submit" class="btn btn-success w-full">
-                                    <i class="fas fa-paper-plane mr-2"></i>Confirm Application
-                                </button>
-                            </form>
+                            <!-- Inside the applyModal div, replace the applyForm section with this: -->
+<form id="applyForm" class="space-y-4">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
+    <input type="hidden" name="job_id" id="applyJobId">
+    
+    <div>
+        <label for="coverLetter" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
+        <textarea id="coverLetter" name="cover_letter" class="form-control" rows="6" 
+                  placeholder="Write a customized cover letter for this position..." required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-success w-full">
+        <i class="fas fa-paper-plane mr-2"></i>Confirm Application
+    </button>
+</form>
                         <?php endif; ?>
                     </div>
                     <div id="applySpinner" class="spinner hidden"></div>
@@ -625,121 +974,185 @@
             }
 
             // Handle CV Upload via AJAX
-            const cvUploadForm = document.getElementById('cvUploadForm');
-            if (cvUploadForm) {
-                cvUploadForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    console.log('CV Upload form submitted');
-                    
-                    const formData = new FormData(this);
-                    const spinner = document.getElementById('applySpinner');
-                    const message = document.getElementById('applyMessage');
+          // Handle CV Upload via AJAX
+const cvUploadForm = document.getElementById('cvUploadForm');
+if (cvUploadForm) {
+    // Add this to the file upload form handling
+const fileInput = document.querySelector('input[type="file"]');
+const fileNameDisplay = document.getElementById('fileNameDisplay');
+const selectedFileName = document.getElementById('selectedFileName');
 
-                    spinner.classList.remove('hidden');
-                    message.classList.add('hidden');
-
-                    fetch('upload_cv.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        console.log('CV Upload response status:', response.status);
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('CV Upload response data:', data);
-                        spinner.classList.add('hidden');
-                        
-                        if (data.success) {
-                            // Update modal content to show the apply form
-                            document.getElementById('applyModalContent').innerHTML = `
-                                <div class="message message-success">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>Your CV has been uploaded successfully! You can now apply for this position.</span>
-                                </div>
-                                <form id="applyForm" class="space-y-4">
-                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
-                                    <input type="hidden" name="job_id" id="applyJobId" value="${currentJobId}">
-                                    <button type="submit" class="btn btn-success w-full">
-                                        <i class="fas fa-paper-plane mr-2"></i>Confirm Application
-                                    </button>
-                                </form>
-                            `;
-                            attachApplyFormListener();
-                        } else {
-                            message.classList.remove('hidden');
-                            message.className = 'message message-error';
-                            message.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${data.error || 'Failed to upload CV.'}</span>`;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('CV Upload error:', error);
-                        spinner.classList.add('hidden');
-                        message.classList.remove('hidden');
-                        message.className = 'message message-error';
-                        message.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>An error occurred while uploading your CV.</span>';
-                    });
-                });
+if (fileInput) {
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            // Show the selected file name
+            selectedFileName.textContent = file.name;
+            fileNameDisplay.classList.remove('hidden');
+            
+            const fileSizeMB = file.size / (1024 * 1024);
+            if (fileSizeMB > 2) {
+                alert('File size must be less than 2MB');
+                this.value = '';
+                fileNameDisplay.classList.add('hidden');
             }
+            
+            const fileType = file.type;
+            if (fileType !== 'application/pdf') {
+                alert('Only PDF files are allowed');
+                this.value = '';
+                fileNameDisplay.classList.add('hidden');
+            }
+        } else {
+            fileNameDisplay.classList.add('hidden');
+        }
+    });
+}
+    cvUploadForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('CV Upload form submitted');
+        
+        const formData = new FormData(this);
+        const spinner = document.getElementById('applySpinner');
+        const message = document.getElementById('applyMessage');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        // Show uploading status
+        uploadStatus.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+
+        fetch('upload_cv.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('CV Upload response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('CV Upload response data:', data);
+            
+            // Hide uploading status
+            uploadStatus.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-upload mr-2"></i>Upload CV';
+
+            if (data.success) {
+                // Show success message temporarily
+                uploadStatus.innerHTML = `
+                    <div class="message message-success !py-2 !px-3 !text-sm">
+                        <i class="fas fa-check-circle"></i>
+                        <span>CV uploaded successfully!</span>
+                    </div>
+                `;
+                uploadStatus.classList.remove('hidden');
+
+                // Update modal content to show the apply form after a delay
+                setTimeout(() => {
+                    document.getElementById('applyModalContent').innerHTML = `
+                        <div class="message message-success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Your CV has been uploaded successfully! You can now apply for this position.</span>
+                        </div>
+                        <form id="applyForm" class="space-y-4">
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
+                            <input type="hidden" name="job_id" id="applyJobId" value="${currentJobId}">
+                            <div>
+                                <label for="coverLetter" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
+                                <textarea id="coverLetter" name="cover_letter" class="form-control" rows="6" 
+                                          placeholder="Write a customized cover letter for this position..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success w-full">
+                                <i class="fas fa-paper-plane mr-2"></i>Confirm Application
+                            </button>
+                        </form>
+                    `;
+                    attachApplyFormListener();
+                }, 1500);
+            } else {
+                message.classList.remove('hidden');
+                message.className = 'message message-error';
+                message.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${data.error || 'Failed to upload CV.'}</span>`;
+            }
+        })
+        .catch(error => {
+            console.error('CV Upload error:', error);
+            // Hide uploading status
+            uploadStatus.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-upload mr-2"></i>Upload CV';
+            
+            message.classList.remove('hidden');
+            message.className = 'message message-error';
+            message.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>An error occurred while uploading your CV.</span>';
+        });
+    });
+}
 
             // Handle Job Application via AJAX
-            function attachApplyFormListener() {
-                const applyForm = document.getElementById('applyForm');
-                if (applyForm) {
-                    applyForm.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        console.log('Apply form submitted');
-                        
-                        const formData = new FormData(this);
-                        const spinner = document.getElementById('applySpinner');
-                        const message = document.getElementById('applyMessage');
+            // Handle Job Application via AJAX
+// Handle Job Application via AJAX
+function attachApplyFormListener() {
+    const applyForm = document.getElementById('applyForm');
+    if (applyForm) {
+        applyForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Apply form submitted');
+            
+            // Create FormData and append all fields
+            const formData = new FormData();
+            formData.append('csrf_token', document.querySelector('#applyForm input[name="csrf_token"]').value);
+            formData.append('job_id', document.getElementById('applyJobId').value);
+            formData.append('cover_letter', document.getElementById('coverLetter').value);
 
-                        // Debug: Log form data
-                        for (let [key, value] of formData.entries()) {
-                            console.log('Form data:', key, value);
-                        }
+            const spinner = document.getElementById('applySpinner');
+            const message = document.getElementById('applyMessage');
 
-                        spinner.classList.remove('hidden');
-                        message.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            message.classList.add('hidden');
 
-                        fetch('apply_job.php', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => {
-                            console.log('Apply response status:', response.status);
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Apply response data:', data);
-                            spinner.classList.add('hidden');
-                            message.classList.remove('hidden');
-                            
-                            if (data.success) {
-                                message.className = 'message message-success';
-                                message.innerHTML = '<i class="fas fa-check-circle"></i><span>Application submitted successfully! We will contact you shortly.</span>';
-                                document.getElementById('applyModalContent').innerHTML = ''; // Clear form
-                                
-                                // Auto-close modal after 3 seconds
-                                setTimeout(() => {
-                                    closeApplyModal();
-                                }, 3000);
-                            } else {
-                                message.className = 'message message-error';
-                                message.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${data.error || 'Failed to apply for the job.'}</span>`;
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Apply error:', error);
-                            spinner.classList.add('hidden');
-                            message.classList.remove('hidden');
-                            message.className = 'message message-error';
-                            message.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>An error occurred while applying for the job.</span>';
-                        });
-                    });
+            fetch('apply_job.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            }
-
+                return response.json();
+            })
+            .then(data => {
+                console.log('Application response:', data);
+                spinner.classList.add('hidden');
+                
+                if (data.success) {
+                    message.className = 'message message-success';
+                    message.innerHTML = `<i class="fas fa-check-circle"></i><span>${data.message || 'Application submitted successfully!'}</span>`;
+                    message.classList.remove('hidden');
+                    
+                    // Clear form and close modal after 2 seconds
+                    setTimeout(() => {
+                        document.getElementById('applyForm').reset();
+                        closeApplyModal();
+                    }, 2000);
+                } else {
+                    message.className = 'message message-error';
+                    message.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${data.error || 'Failed to submit application'}</span>`;
+                    message.classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                spinner.classList.add('hidden');
+                message.className = 'message message-error';
+                message.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>An error occurred while submitting the application</span>';
+                message.classList.remove('hidden');
+            });
+        });
+    }
+}
             // Attach listener to apply form if it exists on page load
             attachApplyFormListener();
 
